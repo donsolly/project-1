@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Readio Rating</title>
+ <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/rating.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+<div class="row">
+<nav class="navbar navbar-inverse">
+<div class="container-fluid">
+<ul class="nav navbar">
+  <li class="nav-item">
+    <a class="nav-link active" href="{{ url_for('dashboard') }}">Return to search</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('logout') }}">Signout</a>
+    <i class="fas fa-sign-out-alt"></i>
+  </li>
+</ul>
+</div>
+</nav>
+</div>
+                    
+                    <!-- Secon Col -->
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-xl-5 col-md-5 col-12 ml-auto">
+      <div id="contact-form">
+    <div>
+        <h1>Rate this book</h1> 
+    </div>
+        <p id="failure">Rating Failed</p>  
+        <p id="success">Rating Successful</p>
+
+           <form method="post" action="{{ url_for('leavereview') }}">
+            <div>
+              <label for="name">
+              {% for isbn_id in bookname %}
+                <span class="required">BOOK ISBN</span>
+                <input type="text" id="name" name="isbn" value="{{ isbn_id.isbn }}" placeholder="ISBN" required="required" tabindex="1" autofocus="autofocus" readonly />
+                {% endfor %}
+              </label> 
+            </div>
+            <div>
+              <label for="email">
+              {% for isbn_id in bookname %}
+                <span class="required">Book Name</span>
+                <input type="email" id="email" value="{{ isbn_id.title }}" placeholder="Book Name" tabindex="2" readonly  />
+              </label>  
+              {% endfor %}
+            </div>
+            <div class="container">
+                    <div class="starrating risingstar flex-row-reverse">
+                    <input required type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star">5</label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 star">4</label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 star">3</label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star">2</label>
+                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 star">1</label>
+                </div>
+                <p> Select a Star Level</p>
+            </div>
+            <div>                 
+              <label for="message">
+                <span class="required">Message: *</span> 
+                <textarea id="message" name="message" placeholder="Please write your message here." tabindex="5" required="required"></textarea> 
+              </label>  
+            </div>
+            <div>                  
+              <button name="submit" type="submit" id="submit" >SEND</button> 
+            </div>
+                
+
+
+          {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <!-- <ul class=flashes> -->
+    {% for message in messages %}
+     <h5> {{ message }} </h5>
+    {% endfor %}
+   
+  {% endif %}
+{% endwith %}
+{% block body %}{% endblock %}
+        
+           </form>
+
+</div>
+    </div>
+    <div class="col-xl-6 col-md-6 col-12 ml-auto">
+    <div class="card">
+    <div class="card-header"> Reader.io Review </div>
+    <ul class="list group list-group-flush">
+    {% for isbn_id in ratings %}
+    <li class="list-group-item card-body">{{ isbn_id.username }} says {{ isbn_id.review }}</li>
+    {% endfor %}
+    </ul>
+    <div class="card-header">Average Rating<div>
+    {{ average }} / 5 Rating on Reader.io
+    </div>
+
+  </div>
+   <br>
+    <div class="card">
+    <div class="card-header"> GoodRead Review </div>
+    <ul class="list group list-group-flush">
+    <li class="list-group-item">{{ ratings_count }} Reviews on GoodRead</li>
+    <li class="list-group-item">{{ average_rating }} / 5 Rating on GoodRead</li>
+    </ul>
+  
+</div>
+    </div>
+    <div class="col-1">
+    </div>
+  </div>
+</div>
+{{ goodread }}
+</div>
+</div>
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
